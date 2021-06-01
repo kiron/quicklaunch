@@ -24,7 +24,7 @@
 
 				function openTab(url, incognito) {
 					chrome.tabs.query({currentWindow: true, url: url},tabs => {
-						if (tabs.length > 0) {
+						if (tabs && tabs.length > 0) {
 							chrome.tabs.update(tabs[0].id, {active: true})
 						} else {
 							if (incognito) {
