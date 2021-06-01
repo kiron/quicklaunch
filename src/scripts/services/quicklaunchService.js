@@ -89,16 +89,36 @@
 				function filterSuggestions(search) {
 
 					command = commands.parse(search);
-
+					
 					if (!command || command.noSuggestion || command.tags.length === 0 || command.tags.join('').length < trigger) {
 						return [];
 					}
 
-					filteredSuggestions = suggestions.all.filter(suggestion => {
-						return command.tags.every(commandTag => {
-							return suggestion.tags.some(tag => tag.indexOf(commandTag) !== -1);
-						});
-					}).slice(0,limit);
+					const options = {
+						location: 20,
+						shouldSort: true,
+						includeScore: true,
+						distance: 500,
+						keys: ['uri', 'tags']
+					};
+
+					const fuse = new Fuse(suggestions.all, options);
+
+
+
+					const results = fuse.search(command.tags.join(' '));					
+
+					filteredSuggestions = results.map(function(result) { return result.item;}).slice(0,limit);
+
+					//browser.notify(JSON.stringify(results));
+					
+					// browser.notify(JSON.stringify(suggestions.all));
+					// filteredSuggestions = suggestions.all.filter(suggestion => {
+					// 	return command.tags.every(commandTag => {
+					// 		return suggestion.tags.some(tag => tag.indexOf(commandTag) !== -1);
+					// 	});
+					// }).slice(0,limit);
+
 
 					if (selectedSuggestions.index >= filteredSuggestions.length) {
 						selectedSuggestions.index = 0;

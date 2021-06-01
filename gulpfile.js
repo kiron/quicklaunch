@@ -54,7 +54,8 @@ gulp.task('scripts', ['jshint'], function() {
 	var vendorsScripts = gulp.src([
 			'src/scripts/vendors/jquery.min.js',
 			'src/scripts/vendors/angular.min.js',
-			'src/scripts/vendors/ui-bootstrap-tpls.min.js'
+			'src/scripts/vendors/ui-bootstrap-tpls.min.js',
+			'src/scripts/vendors/fuse.js'
 			])
 		.pipe(concat('lib.js'))
 		.pipe(gulp.dest('build/scripts'));
