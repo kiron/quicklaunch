@@ -23,12 +23,17 @@
 				};
 
 				function openTab(url, incognito) {
-
-					if (incognito) {
-						chrome.windows.create({ url: url, incognito: true });
-					} else {
-						chrome.tabs.create({ url: url });
-					}
+					chrome.tabs.query({currentWindow: true, url: url},tabs => {
+						if (tabs.length > 0) {
+							chrome.tabs.update(tabs[0].id, {active: true})
+						} else {
+							if (incognito) {
+								chrome.windows.create({ url: url, incognito: true });
+							} else {
+								chrome.tabs.create({ url: url });
+							}
+						}						
+					});										
 				};
 
 				function openSessionTab(urls, incognito) {
